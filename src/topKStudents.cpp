@@ -20,7 +20,61 @@ struct student {
 	char *name;
 	int score;
 };
+void sort(struct student *students, int start, int end)
+{
+	int pivot, i, j;
+	struct student temp;
 
-struct student ** topKStudents(struct student *students, int len, int K) {
+	if (start < end)
+	{
+		pivot = start;
+		i = start;
+		j = end;
+
+
+		while (i < j)
+		{
+			while (students[i].score >= students[pivot].score && i < end)
+			{
+				i++;
+			}
+			while (students[j].score<students[pivot].score)
+			{
+				j--;
+			}
+
+			if (i<j)
+			{
+				temp = students[i];
+				students[i] = students[j];
+				students[j] = temp;
+			}
+		}
+
+
+		temp = students[pivot];
+		students[pivot] = students[j];
+		students[j] = temp;
+
+
+		sort(students, start, j - 1);
+		sort(students, j + 1, end);
+	}
+}
+
+struct student ** topKStudents(struct student *students, int len, int K)
+{
+	struct student **arr;
+	arr = (struct student**)malloc(2 * sizeof(struct student));
+	if (students == NULL || len <= 0 || K <= 0)
+		return NULL;
+
+	sort(students, 0, len - 1);
+	for (int i = 0; i < K; i++)
+	{
+		arr[i] = &students[i];
+	}
+	return arr;
+
 	return NULL;
 }
